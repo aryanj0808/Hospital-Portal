@@ -1,1 +1,26 @@
-# docker-compose.yml
+version: "3.8"
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: hospital-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: adminpass
+      MYSQL_DATABASE: hospitaldb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: adminpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql          # named volume
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql  # init script
+
+  adminer:
+    image: adminer
+    container_name: hospital-adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql-data:          # must be defined as a mapping
